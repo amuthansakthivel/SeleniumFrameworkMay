@@ -5,8 +5,11 @@
 		{
 			
 			"url"		:		 "https://amazon.in/",
-			"username" : "amuthan"
-			
+			"username" : "amuthan",
+			"screenshotrequired" : "yes",
+			"screenshotforpass":"yes",
+			"screenshotforfail":"yes",
+			"screenshotforskip":"no"
 		}
 	}
 }

@@ -2,11 +2,7 @@ package com.training.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-import com.relevantcodes.extentreports.LogStatus;
-import com.training.browser.DriverManager;
-import com.training.reports.ExtentManager;
 
 public class HomePage extends BasePage{
 	
@@ -18,8 +14,7 @@ public class HomePage extends BasePage{
 	
 	
 	public  HamburgerPage clickHamburgerMenu() {
-		link_hamburgermenu.click();
-		ExtentManager.getTest().log(LogStatus.PASS, "HamburgerMenu is clicked successfully");
+		click(link_hamburgermenu, "Hamburger button");
 		return new HamburgerPage();
 	}
 	

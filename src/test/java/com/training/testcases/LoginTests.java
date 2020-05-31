@@ -1,25 +1,18 @@
 package com.training.testcases;
 
 import java.lang.reflect.Method;
+import java.util.Hashtable;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.relevantcodes.extentreports.ExtentTest;
-import com.relevantcodes.extentreports.LogStatus;
 import com.training.browser.Driver;
 import com.training.browser.DriverManager;
-import com.training.constants.Constants;
 import com.training.pages.HamburgerPage;
 import com.training.pages.HomePage;
 import com.training.pages.LaptopPage;
-import com.training.reports.ExtentManager;
-import com.training.reports.ExtentReport;
-import com.training.utils.JsonParser;
+import com.training.utils.TestUtils;
 
 public class LoginTests extends BaseTest{
 
@@ -42,12 +35,29 @@ public class LoginTests extends BaseTest{
 	HamburgerPage hampage;
 	LaptopPage lpage;
 	
+	
 	@Test
-	public void b(Method m) throws Exception {
+	public void dataProviderTest(Hashtable<String, String> data) {
+		System.out.println(data.get("username"));
+		System.out.println(data.get("password"));
+		System.out.println(data.get("firstname"));
+	}
+	
+	@Test
+	public void testcase1(Hashtable<String, String> data) {
+		
+	}
+	@Test
+	public void testcase2(Hashtable<String, String> data) {
+		
+	}
+	
+	@Test
+	public void somethingElse(Hashtable<String,String> data) throws Exception {
 		Driver.setUpDriver("chrome");
 		hpage= new HomePage();
 		hampage= hpage.clickHamburgerMenu();
-		
+		Assert.assertEquals(1, 2);
 		lpage=hampage.clickMobilesAndComputers().clickLaptops();
 		
 		lpage.clickAppleCheckbox().chooseHighToLow();

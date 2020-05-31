@@ -11,14 +11,28 @@ import org.testng.ITestResult;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.training.reports.ExtentManager;
 import com.training.reports.ExtentReport;
+import com.training.reports.LogStatus;
+import com.training.utils.TestUtils;
 
 public class ListenerClass implements ITestListener {
-
-	public void onTestStart(ITestResult result,Method m) {
 	
-		ExtentTest test=  ExtentReport.report.startTest(m.getName());
-		ExtentManager.setExTest(test);
+	private static String TestCaseName;
+	
+
+	public static String getTestCaseName() {
+		return TestCaseName;
+	}
+
+	public static void setTestCaseName(String testCaseName) {
+		TestCaseName = testCaseName;
+	}
+
+	public void onTestStart(ITestResult result) {
+	
+		setTestCaseName(result.getName());
 		
+		ExtentManager.setExTest(ExtentReport.report.startTest(result.getMethod().getDescription()));
+		LogStatus.pass(result.getMethod().getDescription() +" is started successfully");
 	}
 
 	public void onTestSuccess(ITestResult result) {
@@ -29,12 +43,15 @@ public class ListenerClass implements ITestListener {
 
 	public void onTestFailure(ITestResult result) {
 		// TODO Auto-generated method stub
+		LogStatus.fail(result.getMethod().getDescription() +" is failed");
+		LogStatus.fail(result.getThrowable().toString());
+		LogStatus.fail(result.getName() + "is clicked ", TestUtils.pullScreenshotPath());
 		ExtentReport.report.endTest(ExtentManager.getTest());
 	
 	}
 
 	public void onTestSkipped(ITestResult result) {
-		// TODO Auto-generated method stub
+		LogStatus.skip(result.getName() + " is skipped ");
 		ExtentReport.report.endTest(ExtentManager.getTest());
 	
 	}
@@ -55,9 +72,5 @@ public class ListenerClass implements ITestListener {
 		
 	}
 
-	public void onTestStart(ITestResult result) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }

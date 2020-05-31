@@ -17,7 +17,7 @@ public class LaptopPage extends BasePage{
 	private WebElement drpdwn_hightolow;
 	
 	public LaptopPage clickAppleCheckbox() {
-		checkbox_apple.click();
+		click(checkbox_apple, "Apple checkbox");
 		return this;
 	}
 	
