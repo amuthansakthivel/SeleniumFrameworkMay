@@ -24,4 +24,7 @@ public class Constants {
 	public static final String MOZILLA = "mozilla";
 	public static final String TESTDATASHEETNAME = "Sheet1";
 	
+	//Suite Constants
+	public static final String RUNMODE = "local";
+	
 }

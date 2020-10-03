@@ -1,10 +1,16 @@
 package com.training.browser;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import com.training.constants.Constants;
 import com.training.utils.JsonParser;
@@ -31,15 +37,15 @@ public class Driver {
 	 *
 	 */
 
-	private Driver(String browser) {
-		invokeDriver(browser);
+	private Driver(String browser,String testname) throws MalformedURLException {
+		invokeDriver(browser,testname);
 		maximize();
 		setImplicitWait();
 
 	}
-	public static void setUpDriver(String browser) {
+	public static void setUpDriver(String browser,String testname) throws MalformedURLException {
 		if(DriverManager.getDriver()==null) {
-			new Driver(browser); //anonymous object -->No reference to this object
+			new Driver(browser,testname); //anonymous object -->No reference to this object
 		}
 	}
 
@@ -50,27 +56,55 @@ public class Driver {
 		}
 	}
 
+
+	private static void invokeDriver(String browser,String testname) throws MalformedURLException {
+		if(Constants.RUNMODE.equals("local")) {
+			if(browser.equalsIgnoreCase(Constants.CHROME)) {
+				ChromeOptions options= new ChromeOptions();
+				options.addArguments("--headless");
+				System.setProperty("webdriver.chrome.driver", Constants.CHROMEDRIVERPATH);
+				driver= new ChromeDriver();
+			}
+			else if(browser.equalsIgnoreCase(Constants.FIREFOX) || (browser.equalsIgnoreCase(Constants.MOZILLA))) {
+				System.setProperty("webdriver.gecko.driver", Constants.GECKODRIVERPATH);
+				driver= new FirefoxDriver();
+			}
+			else {
+				System.setProperty("webdriver.chrome.driver", Constants.CHROMEDRIVERPATH);
+				driver= new ChromeDriver();
+			}
+			
+		}
+		else if(Constants.RUNMODE.equals("remote")){
+			DesiredCapabilities cap = null;
+			if(browser.equalsIgnoreCase(Constants.CHROME)) {
+				cap= new DesiredCapabilities();
+				cap.setBrowserName(browser);
+				cap.setVersion("84.0");
+				cap.setPlatform(Platform.ANY);
+			}
+			else if(browser.equalsIgnoreCase(Constants.FIREFOX)) {
+				cap = new DesiredCapabilities();
+				cap.setBrowserName(browser);
+				cap.setPlatform(Platform.ANY);
+				cap.setVersion("78.0");
+			}
+			cap.setCapability("enableVNC", true);
+			cap.setCapability("enableVideo", true);
+			cap.setCapability("name", browser+testname);
+			cap.setCapability("videoName", browser+testname+".mp4");
+			cap.setCapability("timeZone", "Asia/Calcutta");
+			driver=new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),cap);
+			driver.get(JsonParser.getValue("config.global.url"));
+		}
+
 	
-	private static void invokeDriver(String browser) {
-		if(browser.equalsIgnoreCase(Constants.CHROME)) {
-			System.setProperty("webdriver.chrome.driver", Constants.CHROMEDRIVERPATH);
-			driver= new ChromeDriver();
-		}
-		else if(browser.equalsIgnoreCase(Constants.FIREFOX) || (browser.equalsIgnoreCase(Constants.MOZILLA))) {
-			System.setProperty("webdriver.gecko.driver", Constants.GECKODRIVERPATH);
-			driver= new FirefoxDriver();
-		}
-		else {
-			System.setProperty("webdriver.chrome.driver", Constants.CHROMEDRIVERPATH);
-			driver= new ChromeDriver();
-		}
-		driver.get(JsonParser.getValue("config.global.url"));
 		DriverManager.setDriver(driver);
 	}
 
 	private static void maximize() {
 		DriverManager.getDriver().manage().window().maximize();
-	
+
 	}
 	private static void setImplicitWait() {
 		DriverManager.getDriver().manage().timeouts().implicitlyWait(Constants.IMPLICITWAIT, TimeUnit.SECONDS);

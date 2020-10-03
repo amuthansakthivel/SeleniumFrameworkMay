@@ -129,6 +129,7 @@ public class TestUtils {
 		sheet=workbook.getSheet(sheetname);
 		int celltype=sheet.getRow(rownum).getCell(colnum).getCellType();
 		Cell cell=sheet.getRow(rownum).getCell(colnum);
+	
 		String temp="";
 		if(celltype==Cell.CELL_TYPE_STRING) {
 			temp= cell.getStringCellValue();

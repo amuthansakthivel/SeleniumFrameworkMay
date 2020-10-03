@@ -1,10 +1,12 @@
 package com.training.testcases;
 
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.util.Hashtable;
 
 import org.openqa.selenium.By;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.Test;
 
 import com.training.browser.Driver;
@@ -36,7 +38,7 @@ public class LoginTests extends BaseTest{
 	LaptopPage lpage;
 	
 	
-	@Test
+//	@Test
 	public void dataProviderTest(Hashtable<String, String> data) {
 		System.out.println(data.get("username"));
 		System.out.println(data.get("password"));
@@ -44,32 +46,55 @@ public class LoginTests extends BaseTest{
 	}
 	
 	@Test
-	public void testcase1(Hashtable<String, String> data) {
+	public void testcase1(Hashtable<String, String> data) throws InterruptedException, MalformedURLException {
+		Driver.setUpDriver(data.get("browser"),data.get("testcasename"));
+		DriverManager.getDriver().get("https://opensource-demo.orangehrmlive.com/");
+		DriverManager.getDriver().findElement(By.id("txtUsername")).sendKeys("Admin");
+		DriverManager.getDriver().findElement(By.id("txtPassword")).sendKeys("admin123");
+		DriverManager.getDriver().findElement(By.id("btnLogin")).click();
+		System.out.println(DriverManager.getDriver().getTitle());
+		Thread.sleep(4000);
+		DriverManager.getDriver().findElement(By.xpath("//a[contains(text(),'Welcome')]")).click();
 		
+		DriverManager.getDriver().findElement(By.xpath("//a[text()='Logout']")).click();
+		throw new SkipException("Test Skipped");
 	}
 	@Test
-	public void testcase2(Hashtable<String, String> data) {
+	public void testcase2(Hashtable<String, String> data) throws InterruptedException, MalformedURLException {
+		Driver.setUpDriver(data.get("browser"),data.get("testcasename"));
+	/*	hpage= new HomePage();
+		hampage= hpage.clickHamburgerMenu();
+		lpage=hampage.clickMobilesAndComputers().clickLaptops();
+		lpage.clickAppleCheckbox().chooseHighToLow();*/
+		DriverManager.getDriver().get("https://opensource-demo.orangehrmlive.com/");
+		DriverManager.getDriver().findElement(By.id("txtUsername")).sendKeys("Admin");
+		DriverManager.getDriver().findElement(By.id("txtPassword")).sendKeys("admin123");
+		DriverManager.getDriver().findElement(By.id("btnLogin")).click();
+		System.out.println(DriverManager.getDriver().getTitle());
+		Thread.sleep(4000);
+		DriverManager.getDriver().findElement(By.xpath("//a[contains(text(),'Welcome')]")).click();
 		
+		DriverManager.getDriver().findElement(By.xpath("//a[text()='Logout']")).click();
 	}
 	
 	@Test
 	public void somethingElse(Hashtable<String,String> data) throws Exception {
-		Driver.setUpDriver("chrome");
-		hpage= new HomePage();
+		Driver.setUpDriver(data.get("browser"),data.get("testcasename"));
+		/*hpage= new HomePage();
 		hampage= hpage.clickHamburgerMenu();
-		Assert.assertEquals(1, 2);
-		lpage=hampage.clickMobilesAndComputers().clickLaptops();
-		
-		lpage.clickAppleCheckbox().chooseHighToLow();
+		lpage=hampage.clickMobilesAndComputers().clickLaptops();*/
+		//lpage.clickAppleCheckbox().chooseHighToLow();
 	
+		DriverManager.getDriver().get("https://opensource-demo.orangehrmlive.com/");
+		DriverManager.getDriver().findElement(By.id("txtUsername")).sendKeys("Admin");
+		DriverManager.getDriver().findElement(By.id("txtPassword")).sendKeys("admin123");
+		DriverManager.getDriver().findElement(By.id("btnLogin")).click();
+		System.out.println(DriverManager.getDriver().getTitle());
 		Thread.sleep(4000);
+		DriverManager.getDriver().findElement(By.xpath("//a[contains(text(),'Welcome')]")).click();
+		
+		DriverManager.getDriver().findElement(By.xpath("//a[text()='Logout']")).click();
 	}
 
-	//@Test
-	public void a() throws Exception {
-
-		DriverManager.getDriver().findElement(By.name("q")).sendKeys("Selenium");
-		Thread.sleep(4000);
-	}
 
 }
